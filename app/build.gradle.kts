@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
+    alias(libs.plugins.jetbrainsKotlinSerialization)
 }
 
 android {
@@ -85,5 +86,8 @@ dependencies {
 
     // Coroutine
     implementation(libs.kotlinx.coroutines.android)
+
+    // Kotlin Serialization
+    implementation(libs.kotlinx.serialization.json)
 
 }

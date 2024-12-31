@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 class NewsSourceRepository @Inject constructor(private val apiService: ApiService) {
-    fun getNewsSource(): Flow<NewsSource> = flow {
+    fun getNewsSource(category: String): Flow<NewsSource> = flow {
         emit(apiService.getNewsSources())
     }.flowOn(Dispatchers.IO)
 }
