@@ -58,7 +58,10 @@ fun NewsSourceScreen(
 
                 is ApiState.Error -> ErrorView("News Sources is Not Found")
 
-                is ApiState.Success -> NewsSourceList(result.data, onGoToNewsSourceArticleScreen)
+                is ApiState.Success -> {
+                    if (result.data.sources.isEmpty()) ErrorView("News Sources is Not Found")
+                    NewsSourceList(result.data, onGoToNewsSourceArticleScreen)
+                }
             }
         }
     }

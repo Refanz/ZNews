@@ -16,7 +16,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object ApiConfig {
 
-    private const val TOKEN = "07c5d7062ad241ad819c8248d5652073"
+    private const val TOKEN = "e7ab812f233d49348f7995927287cbad"
 
     @Provides @Singleton fun getApiService(): ApiService {
         val loggingInterceptor = HttpLoggingInterceptor().setLevel(
