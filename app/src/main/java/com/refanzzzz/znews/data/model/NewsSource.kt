@@ -4,33 +4,33 @@ import com.google.gson.annotations.SerializedName
 
 data class NewsSource(
 
-	@field:SerializedName("sources")
-	private val sources: List<SourceItem>? = null,
+    @field:SerializedName("sources")
+    val sources: List<SourceItem>,
 
-	@field:SerializedName("status")
-	private val status: String? = null
+    @field:SerializedName("status")
+    val status: String
 )
 
 data class SourceItem(
 
-	@field:SerializedName("country")
-	private val country: String? = null,
+    @field:SerializedName("country")
+    val country: String? = null,
 
-	@field:SerializedName("name")
-	private val name: String? = null,
+    @field:SerializedName("name")
+    val name: String? = null,
 
-	@field:SerializedName("description")
-	private val description: String? = null,
+    @field:SerializedName("description")
+    val description: String? = null,
 
-	@field:SerializedName("language")
-	private val language: String? = null,
+    @field:SerializedName("language")
+    val language: String? = null,
 
-	@field:SerializedName("id")
-	private val id: String? = null,
+    @field:SerializedName("id")
+    val id: String? = null,
 
-	@field:SerializedName("category")
-	private val category: String? = null,
+    @field:SerializedName("category")
+    val category: String? = null,
 
-	@field:SerializedName("url")
-	private val url: String? = null
+    @field:SerializedName("url")
+    val url: String? = null
 )

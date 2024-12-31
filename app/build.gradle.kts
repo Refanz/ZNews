@@ -80,6 +80,7 @@ dependencies {
 
     // Navigation
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.hilt.navigation.compose)
 
     // Paging
     implementation(libs.androidx.paging.compose)

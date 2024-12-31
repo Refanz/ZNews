@@ -1,4 +1,4 @@
-package com.refanzzzz.znews.ui.screens.main_screen
+package com.refanzzzz.znews.ui.screen.main_screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -24,21 +23,26 @@ import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.intl.LocaleList
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.refanzzzz.znews.data.local.StaticDataSource
 import com.refanzzzz.znews.data.model.NewsCategory
+import com.refanzzzz.znews.ui.component.BaseScaffold
 
 @Composable
 fun MainScreen(
      onGoToNewsSourceScreen: (category: String) -> Unit
 ) {
-    Column(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        NewsCategoryList(onGoToNewsSourceScreen)
+    BaseScaffold(
+        title = "ZNews"
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+        ) {
+            NewsCategoryList(onGoToNewsSourceScreen)
+        }
     }
 }
 
@@ -63,9 +67,7 @@ fun NewsCategoryCard(category: NewsCategory, onGoToNewsSourceScreen: (category: 
             defaultElevation = 8.dp
         ),
         modifier = Modifier
-            .fillMaxWidth()
-            .height(200.dp)
-            .background(color = Color.White),
+            .fillMaxWidth(),
         onClick = {
             onGoToNewsSourceScreen(category.name)
         }
@@ -77,17 +79,16 @@ fun NewsCategoryCard(category: NewsCategory, onGoToNewsSourceScreen: (category: 
             Image(
                 painter = painterResource(category.image),
                 contentDescription = null,
-                contentScale = ContentScale.FillBounds,
-                modifier = Modifier.fillMaxSize()
+                contentScale = ContentScale.Fit
             )
             Text(
                 color = Color.Black,
                 text = category.name.capitalize(LocaleList.current),
                 textAlign = TextAlign.Center,
-                fontSize = 18.sp,
+                fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier
-                    .padding(8.dp)
+                    .padding(12.dp)
             )
         }
     }

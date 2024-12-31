@@ -1,6 +1,6 @@
 package com.refanzzzz.znews.data.remote.retrofit
 
-import com.refanzzzz.znews.data.remote.ApiUrl
+import com.refanzzzz.znews.utils.ApiURL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -37,7 +37,7 @@ object ApiConfig {
             .build()
 
         val retrofit = Retrofit.Builder()
-            .baseUrl(ApiUrl.BASE_URL)
+            .baseUrl(ApiURL.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()

@@ -10,6 +10,6 @@ import javax.inject.Inject
 
 class NewsSourceRepository @Inject constructor(private val apiService: ApiService) {
     fun getNewsSource(category: String): Flow<NewsSource> = flow {
-        emit(apiService.getNewsSources())
+        emit(apiService.getNewsSources(category))
     }.flowOn(Dispatchers.IO)
 }

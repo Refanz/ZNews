@@ -1,4 +1,4 @@
-package com.refanzzzz.znews.ui.screens.news_source_screen
+package com.refanzzzz.znews.ui.screen.news_source_screen
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
@@ -17,10 +17,10 @@ import javax.inject.Inject
 @HiltViewModel
 class NewsSourceViewModel @Inject constructor(private val newsSourceRepository: NewsSourceRepository): ViewModel() {
 
-    private val _newsSource: MutableState<ApiState<NewsSource>?> = mutableStateOf(null)
-    val newsSource: State<ApiState<NewsSource>?> = _newsSource
+    private val _newsSource: MutableState<ApiState<NewsSource>> = mutableStateOf(ApiState.Loading)
+    val newsSource: State<ApiState<NewsSource>> = _newsSource
 
-    private fun getNewsSource(category: String) {
+    fun getNewsSource(category: String) {
         viewModelScope.launch {
                 newsSourceRepository.getNewsSource(category).onStart {
                 _newsSource.value = ApiState.Loading
