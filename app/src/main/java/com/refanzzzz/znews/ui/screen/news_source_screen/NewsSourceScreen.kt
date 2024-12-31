@@ -71,9 +71,7 @@ fun NewsSourceScreen(
 fun NewsSourceList(newsSource: NewsSource, onGoToNewsSourceArticleScreen: (sourceId: String) -> Unit) {
     LazyColumn(
         contentPadding = PaddingValues(12.dp),
-        verticalArrangement = Arrangement.spacedBy(20.dp),
-        modifier = Modifier
-            .background(color = Color.White)
+        verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
         items(
             items = newsSource.sources,
@@ -91,12 +89,6 @@ fun NewsSourceCardItem(newsSourceItem: SourceItem, onGoToNewsSourceArticleScreen
         ),
         modifier = Modifier
             .fillMaxWidth(),
-        colors = CardColors(
-            containerColor = Color.White,
-            contentColor = CardDefaults.elevatedCardColors().contentColor,
-            disabledContentColor = CardDefaults.elevatedCardColors().disabledContentColor,
-            disabledContainerColor = CardDefaults.elevatedCardColors().disabledContainerColor
-        ),
         onClick = {
             onGoToNewsSourceArticleScreen(newsSourceItem.id ?: "")
         }

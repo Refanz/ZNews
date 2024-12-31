@@ -1,7 +1,6 @@
 package com.refanzzzz.znews.ui.screen.main_screen
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,8 +15,6 @@ import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.font.FontWeight
@@ -31,7 +28,7 @@ import com.refanzzzz.znews.ui.component.BaseScaffold
 
 @Composable
 fun MainScreen(
-     onGoToNewsSourceScreen: (category: String) -> Unit
+    onGoToNewsSourceScreen: (category: String) -> Unit
 ) {
     BaseScaffold(
         title = "ZNews"
@@ -50,9 +47,7 @@ fun MainScreen(
 fun NewsCategoryList(onGoToNewsSourceScreen: (category: String) -> Unit) {
     LazyColumn(
         contentPadding = PaddingValues(8.dp),
-        verticalArrangement = Arrangement.spacedBy(24.dp),
-        modifier = Modifier
-            .background(color = Color.White)
+        verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
         items(items = StaticDataSource.getNewsCategories()) { item ->
             NewsCategoryCard(item, onGoToNewsSourceScreen)
@@ -72,17 +67,12 @@ fun NewsCategoryCard(category: NewsCategory, onGoToNewsSourceScreen: (category: 
             onGoToNewsSourceScreen(category.name)
         }
     ) {
-        Box(
-            modifier = Modifier
-                .background(color = Color.White)
-        ) {
+        Box {
             Image(
                 painter = painterResource(category.image),
-                contentDescription = null,
-                contentScale = ContentScale.Fit
+                contentDescription = null
             )
             Text(
-                color = Color.Black,
                 text = category.name.capitalize(LocaleList.current),
                 textAlign = TextAlign.Center,
                 fontSize = 24.sp,

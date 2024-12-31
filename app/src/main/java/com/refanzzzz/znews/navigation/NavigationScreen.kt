@@ -1,5 +1,7 @@
 package com.refanzzzz.znews.navigation
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
@@ -7,9 +9,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.refanzzzz.znews.ui.screen.main_screen.MainScreen
+import com.refanzzzz.znews.ui.screen.news_article_detail.NewsArticleDetailScreen
 import com.refanzzzz.znews.ui.screen.news_article_screen.NewsArticleScreen
 import com.refanzzzz.znews.ui.screen.news_source_screen.NewsSourceScreen
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun NavigationScreen(modifier: Modifier = Modifier) {
 
@@ -48,6 +52,20 @@ fun NavigationScreen(modifier: Modifier = Modifier) {
 
             NewsArticleScreen(
                 sourceId = newsArticleScreen.sourceId,
+                onGoToArticleDetailScreen = { articleUrl ->
+                    navController.navigate(Screen.NewsArticleDetailScreen(articleUrl))
+                },
+                onGoBack = {
+                    navController.popBackStack()
+                }
+            )
+        }
+
+        composable<Screen.NewsArticleDetailScreen> { backStackEntry ->
+            val newsArticleDetailScreen: Screen.NewsArticleDetailScreen = backStackEntry.toRoute()
+
+            NewsArticleDetailScreen(
+                articleUrl = newsArticleDetailScreen.articleUrl,
                 onGoBack = {
                     navController.popBackStack()
                 }

@@ -39,6 +39,7 @@ import com.refanzzzz.znews.utils.toStandardString
 @Composable
 fun NewsArticleScreen(
     sourceId: String,
+    onGoToArticleDetailScreen: (articleUrl: String) -> Unit,
     onGoBack: () -> Unit
 ) {
     val newsArticleViewModel = hiltViewModel<NewsArticleViewModel>()
@@ -62,7 +63,7 @@ fun NewsArticleScreen(
 
                 is ApiState.Error -> Log.e("NewsSourceScreen", result.error)
 
-                is ApiState.Success -> NewsArticleList(result.data)
+                is ApiState.Success -> NewsArticleList(result.data, onGoToArticleDetailScreen)
             }
         }
     }
@@ -70,36 +71,28 @@ fun NewsArticleScreen(
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun NewsArticleList(newsArticle: NewsArticle) {
+fun NewsArticleList(newsArticle: NewsArticle, onGoToArticleDetailScreen: (articleUrl: String) -> Unit) {
     LazyColumn(
         contentPadding = PaddingValues(12.dp),
-        verticalArrangement = Arrangement.spacedBy(20.dp),
-        modifier = Modifier
-            .background(color = Color.White)
+        verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
         items(
             items = newsArticle.articles
         ) { item ->
-            NewsArticleItem(item)
+            NewsArticleItem(item, onGoToArticleDetailScreen)
         }
     }
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun NewsArticleItem(articleItem: ArticlesItem) {
+fun NewsArticleItem(articleItem: ArticlesItem, onGoToArticleDetailScreen: (articleUrl: String) -> Unit) {
     ElevatedCard(
         elevation = CardDefaults.cardElevation(
             defaultElevation = 8.dp
         ),
         modifier = Modifier
-            .fillMaxWidth(),
-        colors = CardColors(
-            containerColor = Color.White,
-            contentColor = CardDefaults.elevatedCardColors().contentColor,
-            disabledContentColor = CardDefaults.elevatedCardColors().disabledContentColor,
-            disabledContainerColor = CardDefaults.elevatedCardColors().disabledContainerColor
-        )
+            .fillMaxWidth()
     ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -131,6 +124,7 @@ fun NewsArticleItem(articleItem: ArticlesItem) {
 
                 ElevatedButton(
                     onClick = {
+                        onGoToArticleDetailScreen(articleItem.url ?: "")
                     }
                 ) {
                     Text(
