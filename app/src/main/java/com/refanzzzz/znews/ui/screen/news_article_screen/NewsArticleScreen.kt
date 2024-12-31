@@ -30,6 +30,7 @@ import coil3.compose.AsyncImage
 import com.refanzzzz.znews.data.model.ArticlesItem
 import com.refanzzzz.znews.data.model.NewsArticle
 import com.refanzzzz.znews.ui.component.BaseScaffold
+import com.refanzzzz.znews.ui.component.ErrorView
 import com.refanzzzz.znews.ui.component.Loading
 import com.refanzzzz.znews.utils.ApiState
 import com.refanzzzz.znews.utils.convertDateFormat
@@ -61,7 +62,7 @@ fun NewsArticleScreen(
             when (val result = newsArticleViewModel.newsArticles.value) {
                 is ApiState.Loading -> Loading()
 
-                is ApiState.Error -> Log.e("NewsSourceScreen", result.error)
+                is ApiState.Error -> ErrorView("News Articles is Not Found")
 
                 is ApiState.Success -> NewsArticleList(result.data, onGoToArticleDetailScreen)
             }
