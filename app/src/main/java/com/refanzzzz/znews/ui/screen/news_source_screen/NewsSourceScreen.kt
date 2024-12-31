@@ -35,7 +35,7 @@ import com.refanzzzz.znews.utils.ApiState
 @Composable
 fun NewsSourceScreen(
     category: String,
-    onGoToNewsSourceArticleScreen: () -> Unit,
+    onGoToNewsSourceArticleScreen: (sourceId: String) -> Unit,
     onGoBack: () -> Unit
 ) {
     val newsSourceViewModel = hiltViewModel<NewsSourceViewModel>()
@@ -61,14 +61,14 @@ fun NewsSourceScreen(
 
                 is ApiState.Error -> Log.e("NewsSourceScreen", result.error)
 
-                is ApiState.Success -> NewsSourceList(result.data)
+                is ApiState.Success -> NewsSourceList(result.data, onGoToNewsSourceArticleScreen)
             }
         }
     }
 }
 
 @Composable
-fun NewsSourceList(newsSource: NewsSource) {
+fun NewsSourceList(newsSource: NewsSource, onGoToNewsSourceArticleScreen: (sourceId: String) -> Unit) {
     LazyColumn(
         contentPadding = PaddingValues(12.dp),
         verticalArrangement = Arrangement.spacedBy(20.dp),
@@ -78,13 +78,13 @@ fun NewsSourceList(newsSource: NewsSource) {
         items(
             items = newsSource.sources,
         ) { item ->
-            NewsSourceCardItem(item)
+            NewsSourceCardItem(item, onGoToNewsSourceArticleScreen)
         }
     }
 }
 
 @Composable
-fun NewsSourceCardItem(newsSourceItem: SourceItem) {
+fun NewsSourceCardItem(newsSourceItem: SourceItem, onGoToNewsSourceArticleScreen: (sourceId: String) -> Unit) {
     ElevatedCard(
         elevation = CardDefaults.cardElevation(
             defaultElevation = 8.dp
@@ -96,7 +96,10 @@ fun NewsSourceCardItem(newsSourceItem: SourceItem) {
             contentColor = CardDefaults.elevatedCardColors().contentColor,
             disabledContentColor = CardDefaults.elevatedCardColors().disabledContentColor,
             disabledContainerColor = CardDefaults.elevatedCardColors().disabledContainerColor
-        )
+        ),
+        onClick = {
+            onGoToNewsSourceArticleScreen(newsSourceItem.id ?: "")
+        }
     ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -134,7 +137,9 @@ fun PreviewNewsSourceScreen() {
             modifier = Modifier
                 .padding(paddingValues)
         ) {
-            NewsSourceCardItem(SourceItem())
+            NewsSourceCardItem(SourceItem()) {
+
+            }
         }
     }
 }

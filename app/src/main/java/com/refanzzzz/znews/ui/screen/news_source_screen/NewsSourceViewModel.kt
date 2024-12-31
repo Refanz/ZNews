@@ -25,7 +25,7 @@ class NewsSourceViewModel @Inject constructor(private val newsSourceRepository: 
                 newsSourceRepository.getNewsSource(category).onStart {
                 _newsSource.value = ApiState.Loading
             }.catch {
-                _newsSource.value = ApiState.Error(it.message.toString())
+                _newsSource.value = ApiState.Error(it.message ?: "")
             }.collect {
                 _newsSource.value = ApiState.Success(it)
             }

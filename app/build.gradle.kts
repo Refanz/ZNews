@@ -91,4 +91,6 @@ dependencies {
     // Kotlin Serialization
     implementation(libs.kotlinx.serialization.json)
 
+    // Web View
+    implementation(libs.compose.webview)
 }
