@@ -10,5 +10,9 @@ interface ApiService {
     suspend fun getNewsSources(@Query("category") category: String): NewsSource
 
     @GET("everything")
-    suspend fun getNewsArticlesBySource(@Query("sources") source: String): NewsArticle
+    suspend fun getNewsArticlesBySource(
+        @Query("sources") source: String,
+        @Query("page") page: Int = 1,
+        @Query("pageSize") pageSize: Int = 20
+    ): NewsArticle
 }

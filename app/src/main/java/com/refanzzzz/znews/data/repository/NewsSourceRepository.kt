@@ -1,7 +1,11 @@
 package com.refanzzzz.znews.data.repository
 
-import com.refanzzzz.znews.data.model.NewsArticle
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import com.refanzzzz.znews.data.model.ArticlesItem
 import com.refanzzzz.znews.data.model.NewsSource
+import com.refanzzzz.znews.data.remote.paging.NewsArticlePagingDataSource
 import com.refanzzzz.znews.data.remote.retrofit.ApiService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -14,7 +18,12 @@ class NewsSourceRepository @Inject constructor(private val apiService: ApiServic
         emit(apiService.getNewsSources(category))
     }.flowOn(Dispatchers.IO)
 
-    fun getNewsArticlesBySource(source: String): Flow<NewsArticle> = flow {
-        emit(apiService.getNewsArticlesBySource(source))
-    }.flowOn(Dispatchers.IO)
+    fun getNewsArticlesPagingDataSource(source: String): Flow<PagingData<ArticlesItem>> {
+        return Pager(
+            pagingSourceFactory = {
+                NewsArticlePagingDataSource(apiService, source)
+            },
+            config = PagingConfig(20)
+        ).flow
+    }
 }

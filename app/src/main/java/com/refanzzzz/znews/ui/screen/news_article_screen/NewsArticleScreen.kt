@@ -9,30 +9,27 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import coil3.compose.AsyncImage
 import com.refanzzzz.znews.data.model.ArticlesItem
-import com.refanzzzz.znews.data.model.NewsArticle
 import com.refanzzzz.znews.ui.component.BaseScaffold
 import com.refanzzzz.znews.ui.component.ErrorView
 import com.refanzzzz.znews.ui.component.Loading
-import com.refanzzzz.znews.utils.ApiState
 import com.refanzzzz.znews.utils.convertDateFormat
 import com.refanzzzz.znews.utils.toStandardString
 
@@ -44,10 +41,8 @@ fun NewsArticleScreen(
     onGoBack: () -> Unit
 ) {
     val newsArticleViewModel = hiltViewModel<NewsArticleViewModel>()
-
-    LaunchedEffect(Unit) {
-        newsArticleViewModel.getNewsArticlesBySource(sourceId)
-    }
+    val newsArticles =
+        newsArticleViewModel.getNewsArticlesPagingDataSource(sourceId).collectAsLazyPagingItems()
 
     BaseScaffold(
         title = "News Article",
@@ -59,16 +54,7 @@ fun NewsArticleScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            when (val result = newsArticleViewModel.newsArticles.value) {
-                is ApiState.Loading -> Loading()
-
-                is ApiState.Error -> ErrorView("News Articles is Not Found")
-
-                is ApiState.Success -> {
-                    if (result.data.articles.isEmpty()) ErrorView("News Articles is Not Found")
-                    NewsArticleList(result.data, onGoToArticleDetailScreen)
-                }
-            }
+            NewsArticleList(newsArticles, onGoToArticleDetailScreen)
         }
     }
 }
@@ -76,7 +62,7 @@ fun NewsArticleScreen(
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun NewsArticleList(
-    newsArticle: NewsArticle,
+    newsArticles: LazyPagingItems<ArticlesItem>,
     onGoToArticleDetailScreen: (articleUrl: String) -> Unit
 ) {
     LazyColumn(
@@ -84,9 +70,38 @@ fun NewsArticleList(
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
         items(
-            items = newsArticle.articles
-        ) { item ->
-            NewsArticleItem(item, onGoToArticleDetailScreen)
+            count = newsArticles.itemCount
+        ) { index ->
+            val article = newsArticles[index]
+            NewsArticleItem(article!!, onGoToArticleDetailScreen)
+        }
+
+        newsArticles.apply {
+            when {
+                loadState.refresh is LoadState.Loading -> {
+                    item {
+                        Column(
+                            modifier = Modifier.fillParentMaxSize(),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Loading()
+                        }
+                    }
+                }
+
+                loadState.refresh is LoadState.Error -> {
+                    item {
+                        ErrorView("News Articles is not found")
+                    }
+                }
+
+                loadState.append is LoadState.Error -> {
+                    item {
+                        ErrorView("Too many requests to the server")
+                    }
+                }
+            }
         }
     }
 }
@@ -110,7 +125,7 @@ fun NewsArticleItem(
             AsyncImage(
                 model = articleItem.urlToImage,
                 contentDescription = null,
-                contentScale = ContentScale.FillWidth,
+                contentScale = ContentScale.FillBounds,
                 modifier = Modifier
                     .fillMaxWidth()
             )

@@ -56,7 +56,7 @@ fun NewsSourceScreen(
             when (val result = newsSourceViewModel.newsSource.value) {
                 is ApiState.Loading -> Loading()
 
-                is ApiState.Error -> ErrorView("News Sources is Not Found")
+                is ApiState.Error -> ErrorView("Too many requests to the server")
 
                 is ApiState.Success -> {
                     if (result.data.sources.isEmpty()) ErrorView("News Sources is Not Found")

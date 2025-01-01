@@ -1,5 +1,6 @@
 package com.refanzzzz.znews.data.remote.retrofit
 
+import com.refanzzzz.znews.BuildConfig
 import com.refanzzzz.znews.utils.ApiURL
 import dagger.Module
 import dagger.Provides
@@ -16,7 +17,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object ApiConfig {
 
-    private const val TOKEN = "e7ab812f233d49348f7995927287cbad"
+    private const val API_KEY = BuildConfig.API_KEY
 
     @Provides @Singleton fun getApiService(): ApiService {
         val loggingInterceptor = HttpLoggingInterceptor().setLevel(
@@ -26,7 +27,7 @@ object ApiConfig {
         val authInterceptor = Interceptor {chain ->
             val request = chain.request()
             val requestHeaders = request.newBuilder()
-                .addHeader("Authorization", "Bearer $TOKEN")
+                .addHeader("Authorization", "Bearer $API_KEY")
                 .build()
             chain.proceed(requestHeaders)
         }
