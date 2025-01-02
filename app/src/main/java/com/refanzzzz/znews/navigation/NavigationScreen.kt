@@ -11,8 +11,9 @@ import androidx.navigation.toRoute
 import com.refanzzzz.znews.ui.screen.main_screen.MainScreen
 import com.refanzzzz.znews.ui.screen.news_article_detail.NewsArticleDetailScreen
 import com.refanzzzz.znews.ui.screen.news_article_screen.NewsArticleScreen
+import com.refanzzzz.znews.ui.screen.news_article_search.NewsArticleSearchScreen
 import com.refanzzzz.znews.ui.screen.news_source_screen.NewsSourceScreen
-import com.refanzzzz.znews.ui.screen.news_source_screen.search.NewsSourceSearchScreen
+import com.refanzzzz.znews.ui.screen.news_source_search.NewsSourceSearchScreen
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -59,6 +60,9 @@ fun NavigationScreen(modifier: Modifier = Modifier) {
                 onGoToArticleDetailScreen = { articleUrl ->
                     navController.navigate(Screen.NewsArticleDetailScreen(articleUrl))
                 },
+                onGoSearch = { sourceId ->
+                    navController.navigate(Screen.NewsArticleSearchScreen(sourceId))
+                },
                 onGoBack = {
                     navController.popBackStack()
                 }
@@ -82,6 +86,17 @@ fun NavigationScreen(modifier: Modifier = Modifier) {
                     navController.navigate(Screen.NewsArticleScreen(sourceId))
                 },
                 onGoBack = {
+                    navController.popBackStack()
+                }
+            )
+        }
+
+        composable<Screen.NewsArticleSearchScreen> { backStackEntry ->
+            val newsArticleSearchScreen: Screen.NewsArticleSearchScreen = backStackEntry.toRoute()
+
+            NewsArticleSearchScreen(
+                sourceId = newsArticleSearchScreen.sourceId,
+                onBack = {
                     navController.popBackStack()
                 }
             )

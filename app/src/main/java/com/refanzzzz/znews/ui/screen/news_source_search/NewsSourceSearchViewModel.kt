@@ -1,4 +1,4 @@
-package com.refanzzzz.znews.ui.screen.news_source_screen.search
+package com.refanzzzz.znews.ui.screen.news_source_search
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

@@ -38,6 +38,7 @@ import com.refanzzzz.znews.utils.toStandardString
 fun NewsArticleScreen(
     sourceId: String,
     onGoToArticleDetailScreen: (articleUrl: String) -> Unit,
+    onGoSearch: (sourceId: String) -> Unit,
     onGoBack: () -> Unit
 ) {
     val newsArticleViewModel = hiltViewModel<NewsArticleViewModel>()
@@ -45,9 +46,13 @@ fun NewsArticleScreen(
         newsArticleViewModel.getNewsArticlesPagingDataSource(sourceId).collectAsLazyPagingItems()
 
     BaseScaffold(
-        title = "News Article",
+        title = "News Articles",
         isBack = true,
-        onBack = onGoBack,
+        isSearch = true,
+        onSearch = {
+            onGoSearch(sourceId)
+        },
+        onBack = onGoBack
     ) { innerPadding ->
         Column(
             modifier = Modifier

@@ -26,4 +26,13 @@ class NewsSourceRepository @Inject constructor(private val apiService: ApiServic
             config = PagingConfig(20)
         ).flow
     }
+
+    fun searchNewsArticles(source: String, title: String): Flow<PagingData<ArticlesItem>> {
+        return Pager(
+            pagingSourceFactory = {
+                NewsArticlePagingDataSource(apiService, source, title)
+            },
+            config = PagingConfig(20)
+        ).flow
+    }
 }

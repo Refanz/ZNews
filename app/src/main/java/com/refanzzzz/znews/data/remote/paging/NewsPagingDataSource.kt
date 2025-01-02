@@ -9,7 +9,8 @@ import javax.inject.Inject
 
 class NewsArticlePagingDataSource @Inject constructor(
     private val apiService: ApiService,
-    private val source: String
+    private val source: String,
+    private val title: String = ""
 ) :
     PagingSource<Int, ArticlesItem>() {
 
@@ -23,10 +24,16 @@ class NewsArticlePagingDataSource @Inject constructor(
             val newsArticles =
                 apiService.getNewsArticlesBySource(source, page, params.loadSize).articles
 
+            val filteredArticles = if (title.isBlank()) {
+                newsArticles
+            } else {
+                newsArticles.filter { it.title!!.contains(title, ignoreCase = true) }
+            }
+
             return LoadResult.Page(
-                data = newsArticles,
-                prevKey = if (page == 1) null else page - 1,
-                nextKey = if (newsArticles.isEmpty()) null else page + 1
+                data = filteredArticles,
+                prevKey = if (page == 1) null else page.minus(1),
+                nextKey = if (newsArticles.isEmpty()) null else page.plus(1)
             )
 
         } catch (exception: Exception) {
