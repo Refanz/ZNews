@@ -3,6 +3,7 @@ package com.refanzzzz.znews.ui.component
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -19,9 +20,11 @@ import androidx.compose.ui.text.font.FontWeight
 fun BaseScaffold(
     title: String,
     isBack: Boolean = false,
+    isSearch: Boolean = false,
     onBack: () -> Unit = {},
-    content: @Composable (innerPadding: PaddingValues) -> Unit)
-{
+    onSearch: () -> Unit = {},
+    content: @Composable (innerPadding: PaddingValues) -> Unit
+) {
     Scaffold(topBar = {
         TopAppBar(
             colors = topAppBarColors(
@@ -43,6 +46,20 @@ fun BaseScaffold(
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = null
+                        )
+                    }
+                }
+            },
+            actions = {
+                if (isSearch) {
+                    IconButton(
+                        onClick = {
+                            onSearch()
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Search,
                             contentDescription = null
                         )
                     }

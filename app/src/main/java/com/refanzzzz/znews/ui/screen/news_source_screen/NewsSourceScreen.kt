@@ -5,35 +5,30 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.refanzzzz.znews.data.model.NewsSource
 import com.refanzzzz.znews.data.model.SourceItem
 import com.refanzzzz.znews.ui.component.BaseScaffold
 import com.refanzzzz.znews.ui.component.ErrorView
 import com.refanzzzz.znews.ui.component.Loading
+import com.refanzzzz.znews.ui.component.NewsSourceCardItem
 import com.refanzzzz.znews.utils.ApiState
 
 @Composable
 fun NewsSourceScreen(
     category: String,
     onGoToNewsSourceArticleScreen: (sourceId: String) -> Unit,
-    onGoBack: () -> Unit
+    onGoBack: () -> Unit,
+    onGoSearch: () -> Unit
 ) {
     val newsSourceViewModel = hiltViewModel<NewsSourceViewModel>()
 
@@ -44,6 +39,10 @@ fun NewsSourceScreen(
     BaseScaffold(
         title = "News Sources",
         isBack = true,
+        isSearch = true,
+        onSearch = {
+            onGoSearch()
+        },
         onBack = {
             onGoBack()
         }
@@ -77,45 +76,6 @@ fun NewsSourceList(newsSource: NewsSource, onGoToNewsSourceArticleScreen: (sourc
             items = newsSource.sources,
         ) { item ->
             NewsSourceCardItem(item, onGoToNewsSourceArticleScreen)
-        }
-    }
-}
-
-@Composable
-fun NewsSourceCardItem(newsSourceItem: SourceItem, onGoToNewsSourceArticleScreen: (sourceId: String) -> Unit) {
-    ElevatedCard(
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 8.dp
-        ),
-        modifier = Modifier
-            .fillMaxWidth(),
-        onClick = {
-            onGoToNewsSourceArticleScreen(newsSourceItem.id ?: "")
-        }
-    ) {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier
-                .padding(12.dp)
-        ) {
-            Text(
-                fontWeight = FontWeight.Bold,
-                fontSize = 24.sp,
-                text = newsSourceItem.name ?: "BBC News"
-            )
-            Text(
-                fontSize = 16.sp,
-                text = newsSourceItem.description
-                    ?: "Your trusted source for breaking news, analysis, exclusive interviews, headlines, and videos at ABCNews.com."
-            )
-            Text(
-                fontSize = 12.sp,
-                fontWeight = FontWeight.Bold,
-                text = newsSourceItem.category?.uppercase() ?: "Health".uppercase(),
-                textAlign = TextAlign.End,
-                modifier = Modifier
-                    .fillMaxWidth()
-            )
         }
     }
 }

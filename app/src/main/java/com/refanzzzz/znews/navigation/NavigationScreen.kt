@@ -12,6 +12,7 @@ import com.refanzzzz.znews.ui.screen.main_screen.MainScreen
 import com.refanzzzz.znews.ui.screen.news_article_detail.NewsArticleDetailScreen
 import com.refanzzzz.znews.ui.screen.news_article_screen.NewsArticleScreen
 import com.refanzzzz.znews.ui.screen.news_source_screen.NewsSourceScreen
+import com.refanzzzz.znews.ui.screen.news_source_screen.search.NewsSourceSearchScreen
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -43,6 +44,9 @@ fun NavigationScreen(modifier: Modifier = Modifier) {
                 },
                 onGoBack = {
                     navController.popBackStack()
+                },
+                onGoSearch = {
+                    navController.navigate(Screen.NewsSourceSearchScreen)
                 }
             )
         }
@@ -66,6 +70,17 @@ fun NavigationScreen(modifier: Modifier = Modifier) {
 
             NewsArticleDetailScreen(
                 articleUrl = newsArticleDetailScreen.articleUrl,
+                onGoBack = {
+                    navController.popBackStack()
+                }
+            )
+        }
+
+        composable<Screen.NewsSourceSearchScreen> {
+            NewsSourceSearchScreen(
+                onGoToNewsSourceArticleScreen = { sourceId ->
+                    navController.navigate(Screen.NewsArticleScreen(sourceId))
+                },
                 onGoBack = {
                     navController.popBackStack()
                 }
