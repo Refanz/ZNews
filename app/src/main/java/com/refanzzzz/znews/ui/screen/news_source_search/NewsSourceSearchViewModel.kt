@@ -35,7 +35,7 @@ class NewsSourceSearchViewModel @Inject constructor(private val newsSourceReposi
 
     private val _newsSources = MutableStateFlow<List<SourceItem>>(emptyList())
     val newsSources = searchText
-        .debounce(1000L)
+        .debounce(500L)
         .onEach { _isSearching.update { true } }
         .combine(_newsSources) { text, newsSources ->
             if (text.isBlank()) {

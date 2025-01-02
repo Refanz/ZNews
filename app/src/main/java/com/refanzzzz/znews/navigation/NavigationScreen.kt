@@ -96,6 +96,9 @@ fun NavigationScreen(modifier: Modifier = Modifier) {
 
             NewsArticleSearchScreen(
                 sourceId = newsArticleSearchScreen.sourceId,
+                onGoToArticleDetailScreen = { articleUrl ->
+                    navController.navigate(Screen.NewsArticleDetailScreen(articleUrl))
+                },
                 onBack = {
                     navController.popBackStack()
                 }

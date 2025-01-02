@@ -3,7 +3,6 @@ package com.refanzzzz.znews.ui.screen.news_article_search
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
-import com.refanzzzz.znews.data.model.ArticlesItem
 import com.refanzzzz.znews.data.repository.NewsSourceRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -21,7 +20,8 @@ import javax.inject.Inject
 
 @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
 @HiltViewModel
-class NewsArticleSearchViewModel @Inject constructor(private val newsSourceRepository: NewsSourceRepository) : ViewModel() {
+class NewsArticleSearchViewModel @Inject constructor(private val newsSourceRepository: NewsSourceRepository) :
+    ViewModel() {
 
     private val _searchText = MutableStateFlow("")
     val searchText = _searchText.asStateFlow()
@@ -33,11 +33,8 @@ class NewsArticleSearchViewModel @Inject constructor(private val newsSourceRepos
         _searchText.value = text
     }
 
-    private val _newsArticles = MutableStateFlow<PagingData<ArticlesItem>>(PagingData.empty())
-    val newsArticles = _newsArticles.asStateFlow()
-
     fun searchNewsArticles(source: String) = searchText
-        .debounce(1000L)
+        .debounce(500L)
         .onEach {
             _isSearching.update { true }
         }
@@ -49,6 +46,6 @@ class NewsArticleSearchViewModel @Inject constructor(private val newsSourceRepos
         .stateIn(
             viewModelScope,
             SharingStarted.WhileSubscribed(5000),
-            _newsArticles.value
+            PagingData.empty()
         )
 }

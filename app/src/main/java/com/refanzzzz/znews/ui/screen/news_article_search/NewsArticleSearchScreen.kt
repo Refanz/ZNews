@@ -19,19 +19,21 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.refanzzzz.znews.ui.component.BaseScaffold
 import com.refanzzzz.znews.ui.component.Loading
+import com.refanzzzz.znews.ui.component.NewsArticleItem
 import com.refanzzzz.znews.ui.component.SearchForm
-import com.refanzzzz.znews.ui.screen.news_article_screen.NewsArticleItem
 
 @SuppressLint("NewApi")
 @Composable
 fun NewsArticleSearchScreen(
     sourceId: String,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    onGoToArticleDetailScreen: (articleUrl: String) -> Unit
 ) {
 
     val newsArticleSearchViewModel = hiltViewModel<NewsArticleSearchViewModel>()
     val searchText by newsArticleSearchViewModel.searchText.collectAsState()
-    val newsArticles = newsArticleSearchViewModel.newsArticles.collectAsLazyPagingItems()
+    val newsArticles =
+        newsArticleSearchViewModel.searchNewsArticles(sourceId).collectAsLazyPagingItems()
     val isSearching by newsArticleSearchViewModel.isSearching.collectAsState()
 
     BaseScaffold(
@@ -44,7 +46,11 @@ fun NewsArticleSearchScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            SearchForm(searchText, newsArticleSearchViewModel::onSearchTextChange)
+            SearchForm(
+                placeholder = "Search articles by title..",
+                searchText = searchText,
+                onSearchTextChange = newsArticleSearchViewModel::onSearchTextChange
+            )
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -62,7 +68,10 @@ fun NewsArticleSearchScreen(
                         count = newsArticles.itemCount
                     ) { index ->
                         val article = newsArticles[index]
-                        NewsArticleItem(article!!) { }
+                        NewsArticleItem(
+                            article!!,
+                            showImage = false,
+                            onGoToArticleDetailScreen = onGoToArticleDetailScreen)
                     }
                 }
             }

@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun SearchForm(searchText: String, onSearchTextChange: (value: String) -> Unit) {
+fun SearchForm(placeholder: String, searchText: String, onSearchTextChange: (value: String) -> Unit) {
     OutlinedTextField(
         value = searchText,
         onValueChange = {
@@ -22,7 +22,7 @@ fun SearchForm(searchText: String, onSearchTextChange: (value: String) -> Unit) 
             .fillMaxWidth()
             .padding(8.dp),
         placeholder = {
-            Text("Search News Source..")
+            Text(placeholder)
         },
         leadingIcon = {
             Icon(

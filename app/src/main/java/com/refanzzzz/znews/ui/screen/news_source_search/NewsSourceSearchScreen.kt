@@ -42,7 +42,11 @@ fun NewsSourceSearchScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            SearchForm(searchText, onSearchTextChange = newsSourceViewModel::onSearchTextChange)
+            SearchForm(
+                placeholder = "Search news source by name..",
+                searchText = searchText,
+                onSearchTextChange = newsSourceViewModel::onSearchTextChange
+            )
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -56,7 +60,7 @@ fun NewsSourceSearchScreen(
                         .fillMaxWidth()
                         .weight(1f)
                 ) {
-                    items(newsSources) {source ->
+                    items(newsSources) { source ->
                         NewsSourceCardItem(
                             source, onGoToNewsSourceArticleScreen
                         )
