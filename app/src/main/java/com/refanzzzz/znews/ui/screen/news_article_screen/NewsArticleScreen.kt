@@ -18,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -44,6 +45,8 @@ fun NewsArticleScreen(
     val newsArticles =
         newsArticleViewModel.getNewsArticlesPagingDataSource(sourceId).collectAsLazyPagingItems()
 
+    val context = LocalContext.current
+
     BaseScaffold(
         title = "News Article",
         isBack = true,
@@ -69,6 +72,19 @@ fun NewsArticleList(
         contentPadding = PaddingValues(12.dp),
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
+        if (newsArticles.itemCount == 0 && newsArticles.loadState.isIdle) {
+            item {
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .fillParentMaxSize()
+                ) {
+                    ErrorView("Articles is not found")
+                }
+            }
+        }
+
         items(
             count = newsArticles.itemCount
         ) { index ->
@@ -81,9 +97,24 @@ fun NewsArticleList(
                 loadState.refresh is LoadState.Loading -> {
                     item {
                         Column(
-                            modifier = Modifier.fillParentMaxSize(),
                             verticalArrangement = Arrangement.Center,
-                            horizontalAlignment = Alignment.CenterHorizontally
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier
+                                .fillParentMaxSize()
+                        ) {
+                            Loading()
+                        }
+                    }
+                }
+
+                loadState.append is LoadState.Loading -> {
+                    item {
+                        Column(
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier
+                                .fillMaxWidth()
+
                         ) {
                             Loading()
                         }
@@ -92,13 +123,28 @@ fun NewsArticleList(
 
                 loadState.refresh is LoadState.Error -> {
                     item {
-                        ErrorView("News Articles is not found")
+                        Column(
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier
+                                .fillParentMaxSize()
+                        ) {
+                            Text("Too many requests to the server")
+                        }
                     }
                 }
 
                 loadState.append is LoadState.Error -> {
                     item {
-                        ErrorView("Too many requests to the server")
+                        Column(
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier
+                                .fillMaxWidth()
+
+                        ) {
+                            ErrorView("Too many requests to the server")
+                        }
                     }
                 }
             }
